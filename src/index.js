@@ -1,4 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import validate from './validate.js';
+import app from './app.js';
 
-validate();
+app();
