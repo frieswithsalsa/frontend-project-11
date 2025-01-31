@@ -1,6 +1,8 @@
 import i18next from 'i18next';
 import { initView } from './view.js';
 import { createSchema } from './validate.js';
+import { fetchRss } from './rss.js';
+import { parseRSS } from './parser.js';
 
 export default () => {
   const state = {
@@ -37,15 +39,24 @@ export default () => {
 
     const schema = createSchema(watchedState.urls);
     
-
     try {
       await schema.validate(url);
+      watchedState.loading = true;
+
+      const rssData = await fetchRss(url);
+      const { feed, posts } = parseRSS(rssData);
+
+      watchedState.feeds.push(feed);
+      watchedState.posts.push(...posts);
       watchedState.urls.push(url);
+
       watchedState.isValid = true;
       watchedState.error = ''; 
     } catch (err) {
       watchedState.error = err.message;
       watchedState.isValid = false;
+    } finally {
+      watchedState.loading = false;
     }
   });
 };
