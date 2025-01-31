@@ -18,14 +18,16 @@ export const parseRSS = (xmlString) => {
   const posts = Array.from(items).map((item) => {
     const title = item.querySelector('title');
     const link = item.querySelector('link');
+    const description = item.querySelector('description');
 
-    if (!title || !link) {
+    if (!title || !link || !description) {
       throw new Error('Ресурс не содержит валидный RSS');
     }
 
     return {
       title: title.textContent,
       link: link.textContent,
+      description: description.textContent,
     };
   });
 

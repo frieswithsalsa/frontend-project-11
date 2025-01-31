@@ -33,10 +33,10 @@ export const initView = (state, i18next) => {
 
   const renderFeeds = () => {
     feedsContainer.innerHTML = `
-      <h3 class="${state.feeds.length === 0 ? 'd-none' : ''}">Фиды</h3>
+      <h4 class="${state.feeds.length === 0 ? 'd-none' : ''} mb-4">Фиды</h4>
       ${state.feeds.map((feed) => `
         <div class="feed mb-4">
-          <h4>${feed.title}</h4>
+          <h6>${feed.title}</h6>
           <p>${feed.description}</p>
         </div>
       `).join('')}
@@ -45,16 +45,25 @@ export const initView = (state, i18next) => {
 
   const renderPosts = () => {
     postsContainer.innerHTML = `
-      <h3 class="${state.posts.length === 0 ? 'd-none' : ''}">Посты</h3>
+      <h4 class="${state.posts.length === 0 ? 'd-none' : ''} mb-4">Посты</h4>
       ${state.posts.map((post) => `
         <div class="post mb-3 d-flex justify-content-between align-items-center">
-          <a href="${post.link}" target="_blank" class="post-link ${state.readPostIds.includes(post.id) ? 'fw-normal' : 'fw-bold'}">
+          <a href="${post.link}" target="_blank" class="post-link ${state.readPostIds.includes(post.id) ? 'text-secondary fw-normal' : 'fw-bold'}">
             ${post.title}
           </a>
           <button class="btn btn-outline-primary btn-sm" data-post-id="${post.id}">Просмотр</button>
         </div>
       `).join('')}
     `;
+
+    document.querySelectorAll('.post-link').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const postId = e.target.closest('.post-link').dataset.postId;
+        if (postId && !state.readPostIds.includes(postId)) {
+          state.readPostIds.push(postId);
+        }
+      });
+    });
 
     document.querySelectorAll('.btn-outline-primary').forEach((button) => {
       button.addEventListener('click', (e) => {
@@ -63,7 +72,9 @@ export const initView = (state, i18next) => {
         const post = state.posts.find((p) => p.id === postId);
         if (post) {
           handlePostClick(post);
-          markPostAsRead(postId); 
+          if (!state.readPostIds.includes(postId)) {
+            state.readPostIds.push(postId);
+          }
         }
       });
     });
