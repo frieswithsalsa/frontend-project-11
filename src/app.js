@@ -9,7 +9,7 @@ export default () => {
   const state = {
     urls: [],
     isValid: true,
-    error: '',       
+    error: '',
     feeds: [],
     posts: [],
     readPostIds: [],
@@ -26,7 +26,7 @@ export default () => {
           existingUrl: 'RSS уже существует',
           required: 'Не должно быть пустым',
           networkError: 'Ошибка сети',
-          invalidRSS: 'Ресурс не содержит валидный RSS'
+          invalidRSS: 'Ресурс не содержит валидный RSS',
         },
       },
     },
@@ -51,12 +51,13 @@ export default () => {
       watchedState.loading = true;
 
       const rssData = await fetchRss(url);
+
       const { feed, posts } = parseRSS(rssData);
 
       watchedState.feeds.push(feed);
       watchedState.posts.push(...posts.map((post, index) => ({
         ...post,
-        id: `post-${index}`, 
+        id: `post-${index}`,
       })));
       watchedState.urls.push(url);
 
@@ -66,12 +67,11 @@ export default () => {
       if (watchedState.urls.length === 1) {
         checkForUpdates(watchedState);
       }
-
     } catch (err) {
       if (err.name === 'ValidationError') {
-        watchedState.error = err.message; 
+        watchedState.error = err.message;
       } else {
-        watchedState.error = i18next.t(err.message); 
+        watchedState.error = i18next.t(err.message);
       }
       watchedState.isValid = false;
     } finally {
