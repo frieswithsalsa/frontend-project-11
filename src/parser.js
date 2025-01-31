@@ -4,14 +4,14 @@ export const parseRSS = (xmlString) => {
 
   const errorNode = doc.querySelector('parsererror');
   if (errorNode) {
-    throw new Error('Ресурс не содержит валидный RSS');
+    throw new Error('invalidRSS');
   }
 
   const feedTitle = doc.querySelector('channel > title');
   const feedDescription = doc.querySelector('channel > description');
 
   if (!feedTitle || !feedDescription) {
-    throw new Error('Ресурс не содержит валидный RSS');
+    throw new Error('invalidRSS');
   }
 
   const items = doc.querySelectorAll('item');
@@ -21,7 +21,7 @@ export const parseRSS = (xmlString) => {
     const description = item.querySelector('description');
 
     if (!title || !link || !description) {
-      throw new Error('Ресурс не содержит валидный RSS');
+      throw new Error('invalidRSS');
     }
 
     return {
