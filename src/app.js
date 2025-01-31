@@ -7,6 +7,9 @@ export default () => {
     urls: [],
     isValid: true,
     error: '',
+    feeds: [],
+    posts: [],
+    loading: false,
   };
 
   i18next.init({
