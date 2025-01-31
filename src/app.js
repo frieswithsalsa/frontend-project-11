@@ -3,14 +3,16 @@ import { initView } from './view.js';
 import { createSchema } from './validate.js';
 import { fetchRss } from './rss.js';
 import { parseRSS } from './parser.js';
+import { checkForUpdates } from './updater.js';
 
 export default () => {
   const state = {
     urls: [],
     isValid: true,
-    error: '',
+    error: '',       
     feeds: [],
     posts: [],
+    readPostIds: [],
     loading: false,
   };
 
@@ -30,7 +32,6 @@ export default () => {
 
   const watchedState = initView(state, i18next);
 
-
   const form = document.querySelector('.rss-form');
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -38,8 +39,12 @@ export default () => {
     const url = formData.get('url').trim();
 
     const schema = createSchema(watchedState.urls);
-    
+
     try {
+      if (watchedState.urls.includes(url)) {
+        throw new Error('existingUrl');
+      }
+
       await schema.validate(url);
       watchedState.loading = true;
 
@@ -47,13 +52,25 @@ export default () => {
       const { feed, posts } = parseRSS(rssData);
 
       watchedState.feeds.push(feed);
-      watchedState.posts.push(...posts);
+      watchedState.posts.push(...posts.map((post, index) => ({
+        ...post,
+        id: `post-${index}`, 
+      })));
       watchedState.urls.push(url);
 
       watchedState.isValid = true;
-      watchedState.error = ''; 
+      watchedState.error = '';
+
+      if (watchedState.urls.length === 1) {
+        checkForUpdates(watchedState);
+      }
+
     } catch (err) {
-      watchedState.error = err.message;
+      if (err.name === 'ValidationError') {
+        watchedState.error = err.message; 
+      } else {
+        watchedState.error = i18next.t(err.message); 
+      }
       watchedState.isValid = false;
     } finally {
       watchedState.loading = false;
