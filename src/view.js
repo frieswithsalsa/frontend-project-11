@@ -25,12 +25,6 @@ export const initView = (state, i18next) => {
     modal.show();
   };
 
-  const markPostAsRead = (postId) => {
-    if (!state.readPostIds.includes(postId)) {
-      state.readPostIds.push(postId);
-    }
-  };
-
   const renderFeeds = () => {
     feedsContainer.innerHTML = `
       <h4 class="${state.feeds.length === 0 ? 'd-none' : ''} mb-4">Фиды</h4>
@@ -48,7 +42,7 @@ export const initView = (state, i18next) => {
       <h4 class="${state.posts.length === 0 ? 'd-none' : ''} mb-4">Посты</h4>
       ${state.posts.map((post) => `
         <div class="post mb-3 d-flex justify-content-between align-items-center">
-          <a href="${post.link}" target="_blank" class="post-link ${state.readPostIds.includes(post.id) ? 'text-secondary fw-normal' : 'fw-bold'}">
+          <a href="${post.link}" target="_blank" class="post-link ${state.readPostIds.includes(post.id) ? 'text-secondary fw-normal' : 'fw-bold'}" data-post-id="${post.id}">
             ${post.title}
           </a>
           <button class="btn btn-outline-primary btn-sm" data-post-id="${post.id}">Просмотр</button>
@@ -58,9 +52,11 @@ export const initView = (state, i18next) => {
 
     document.querySelectorAll('.post-link').forEach((link) => {
       link.addEventListener('click', (e) => {
-        const postId = e.target.closest('.post-link').dataset.postId;
+        const postId = e.target.dataset.postId;
         if (postId && !state.readPostIds.includes(postId)) {
           state.readPostIds.push(postId);
+          e.target.classList.add('text-muted', 'fw-normal');
+          e.target.classList.remove('fw-bold')
         }
       });
     });
@@ -74,6 +70,11 @@ export const initView = (state, i18next) => {
           handlePostClick(post);
           if (!state.readPostIds.includes(postId)) {
             state.readPostIds.push(postId);
+            const postLink = document.querySelector(`.post-link[data-post-id="${postId}"]`)
+            if (postLink) {
+              postLink.classList.add('text-muted', 'fw-normal');
+              postLink.classList.remove('fw-bold')
+            }
           }
         }
       });
