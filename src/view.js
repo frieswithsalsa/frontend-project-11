@@ -81,9 +81,9 @@ export const initView = (state, i18next) => {
   };
 
   return onChange(state, (path) => {
-    if (path === 'isValid' || path === 'error') {
+    if (path === 'isValid' || path === 'error' | path === "successMessage") {
       if (state.isValid) {
-        feedback.textContent = i18next.t('success');
+        feedback.textContent = state.successMessage;
         feedback.classList.replace('text-danger', 'text-success');
         input.classList.remove('is-invalid');
         input.value = '';
