@@ -15,7 +15,6 @@ export const initView = (state, i18next) => {
 
   const handlePostClick = (post) => {
     if (!post.title || !post.description || !post.link) {
-      console.error('Пост не содержит необходимых данных:', post);
       return;
     }
 

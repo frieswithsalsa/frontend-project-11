@@ -14,6 +14,7 @@ export default () => {
     posts: [],
     readPostIds: [],
     loading: false,
+    successMessage: '',
   };
 
   i18next.init({
@@ -63,6 +64,7 @@ export default () => {
 
       watchedState.isValid = true;
       watchedState.error = '';
+      watchedState.successMessage = i18next.t('success');
 
       setTimeout(() => {
         if (watchedState.urls.length === 1) {
@@ -76,6 +78,7 @@ export default () => {
         watchedState.error = i18next.t(err.message);
       }
       watchedState.isValid = false;
+      watchedState.successMessage = '';
     } finally {
       watchedState.loading = false;
     }
