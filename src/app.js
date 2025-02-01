@@ -68,7 +68,7 @@ export default () => {
         if (watchedState.urls.length === 1) {
           checkForUpdates(watchedState);
         }
-      }, 1000); // Задержка в 1 секунду
+      }, 1000);
     } catch (err) {
       if (err.name === 'ValidationError') {
         watchedState.error = err.message;
