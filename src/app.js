@@ -40,6 +40,14 @@ export default () => {
     const formData = new FormData(e.target);
     const url = formData.get('url').trim();
 
+    watchedState.isValid = true;
+    watchedState.error = '';
+    watchedState.loading = true;
+
+    watchedState.loading = true;
+    watchedState.isValid = true;
+    watchedState.error = '';
+
     const schema = createSchema(watchedState.urls);
 
     try {
@@ -63,6 +71,11 @@ export default () => {
 
       watchedState.isValid = true;
       watchedState.error = '';
+
+      watchedState.isValid = true;
+      watchedState.error = 'success';
+
+
 
       if (watchedState.urls.length === 1) {
         checkForUpdates(watchedState);
