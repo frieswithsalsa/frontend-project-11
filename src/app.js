@@ -44,10 +44,6 @@ export default () => {
     watchedState.error = '';
     watchedState.loading = true;
 
-    watchedState.loading = true;
-    watchedState.isValid = true;
-    watchedState.error = '';
-
     const schema = createSchema(watchedState.urls);
 
     try {
@@ -56,10 +52,8 @@ export default () => {
       }
 
       await schema.validate(url);
-      watchedState.loading = true;
 
       const rssData = await fetchRss(url);
-
       const { feed, posts } = parseRSS(rssData);
 
       watchedState.feeds.push(feed);
@@ -70,12 +64,7 @@ export default () => {
       watchedState.urls.push(url);
 
       watchedState.isValid = true;
-      watchedState.error = '';
-
-      watchedState.isValid = true;
       watchedState.error = 'success';
-
-
 
       if (watchedState.urls.length === 1) {
         checkForUpdates(watchedState);
@@ -88,7 +77,7 @@ export default () => {
       }
       watchedState.isValid = false;
     } finally {
-      watchedState.loading = false;
+      watchedState.loading = false; 
     }
   });
 };
