@@ -40,10 +40,6 @@ export default () => {
     const formData = new FormData(e.target);
     const url = formData.get('url').trim();
 
-    watchedState.isValid = true;
-    watchedState.error = '';
-    watchedState.loading = true;
-
     const schema = createSchema(watchedState.urls);
 
     try {
@@ -52,8 +48,10 @@ export default () => {
       }
 
       await schema.validate(url);
+      watchedState.loading = true;
 
       const rssData = await fetchRss(url);
+
       const { feed, posts } = parseRSS(rssData);
 
       watchedState.feeds.push(feed);
@@ -64,11 +62,13 @@ export default () => {
       watchedState.urls.push(url);
 
       watchedState.isValid = true;
-      watchedState.error = 'success';
+      watchedState.error = '';
 
-      if (watchedState.urls.length === 1) {
-        checkForUpdates(watchedState);
-      }
+      setTimeout(() => {
+        if (watchedState.urls.length === 1) {
+          checkForUpdates(watchedState);
+        }
+      }, 1000); // Задержка в 1 секунду
     } catch (err) {
       if (err.name === 'ValidationError') {
         watchedState.error = err.message;
@@ -77,7 +77,7 @@ export default () => {
       }
       watchedState.isValid = false;
     } finally {
-      watchedState.loading = false; 
+      watchedState.loading = false;
     }
   });
 };
