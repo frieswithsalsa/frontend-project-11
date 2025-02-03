@@ -74,7 +74,6 @@ export default () => {
 
       await loadRssFeed(url, watchedState);
 
-      // Запуск проверки обновлений, если это первый RSS-фид
       if (watchedState.urls.length === 1) {
         setTimeout(() => {
           checkForUpdates(watchedState);
