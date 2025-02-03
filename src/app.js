@@ -1,9 +1,30 @@
+/* eslint-disable no-useless-catch */
 import i18next from 'i18next';
 import { initView } from './view.js';
 import { createSchema } from './validate.js';
 import { fetchRss } from './rss.js';
 import { parseRSS } from './parser.js';
 import { checkForUpdates } from './updater.js';
+
+const loadRssFeed = async (url, watchedState) => {
+  try {
+    const rssData = await fetchRss(url);
+    const { feed, posts } = parseRSS(rssData);
+
+    watchedState.feeds.push(feed);
+    watchedState.posts.push(...posts.map((post, index) => ({
+      ...post,
+      id: `post-${index}`,
+    })));
+    watchedState.urls.push(url);
+
+    watchedState.isValid = true;
+    watchedState.error = '';
+    watchedState.successMessage = i18next.t('success');
+  } catch (err) {
+    throw err;
+  }
+};
 
 export default () => {
   const state = {
@@ -51,26 +72,14 @@ export default () => {
       await schema.validate(url);
       watchedState.loading = true;
 
-      const rssData = await fetchRss(url);
+      await loadRssFeed(url, watchedState);
 
-      const { feed, posts } = parseRSS(rssData);
-
-      watchedState.feeds.push(feed);
-      watchedState.posts.push(...posts.map((post, index) => ({
-        ...post,
-        id: `post-${index}`,
-      })));
-      watchedState.urls.push(url);
-
-      watchedState.isValid = true;
-      watchedState.error = '';
-      watchedState.successMessage = i18next.t('success');
-
-      setTimeout(() => {
-        if (watchedState.urls.length === 1) {
+      // Запуск проверки обновлений, если это первый RSS-фид
+      if (watchedState.urls.length === 1) {
+        setTimeout(() => {
           checkForUpdates(watchedState);
-        }
-      }, 1000);
+        }, 1000);
+      }
     } catch (err) {
       if (err.name === 'ValidationError') {
         watchedState.error = err.message;
