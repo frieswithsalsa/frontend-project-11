@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-catch */
 import i18next from 'i18next';
-import initView  from './view.js';
+import initView from './view.js';
 import { createSchema } from './validate.js';
 import fetchRss from './rss.js';
 import parseRSS from './parser.js';
@@ -11,24 +11,36 @@ const loadRssFeed = async (url, watchedState) => {
     const rssData = await fetchRss(url);
     const { feed, posts } = parseRSS(rssData);
 
-    watchedState.feeds.push(feed);
-    watchedState.posts.push(...posts.map((post, index) => ({
-      ...post,
-      id: `post-${index}`,
-    })));
-    watchedState.urls.push(url);
+    const newState = {
+      ...watchedState,
+      feeds: [...watchedState.feeds, feed],
+      posts: [
+        ...watchedState.posts,
+        ...posts.map((post, index) => ({
+          ...post,
+          id: `post-${index}`,
+        })),
+      ],
+      urls: [...watchedState.urls, url],
+      isValid: true,
+      error: '',
+      successMessage: i18next.t('success'),
+    };
 
-    watchedState.isValid = true;
-    watchedState.error = '';
-    watchedState.successMessage = i18next.t('success');
+    return newState;
   } catch (err) {
+    const newState = {
+      ...watchedState,
+      isValid: false,
+      successMessage: '',
+    };
+
     if (err instanceof TypeError && err.message === 'networkError') {
-      watchedState.error = i18next.t('networkError');
+      newState.error = i18next.t('networkError');
     } else {
-      watchedState.error = i18next.t('invalidRSS');
+      newState.error = i18next.t('invalidRSS');
     }
-    watchedState.isValid = false;
-    watchedState.successMessage = '';
+
     throw err;
   }
 };
@@ -79,13 +91,15 @@ export default () => {
       await schema.validate(url);
       watchedState.loading = true;
 
-      await loadRssFeed(url, watchedState);
+      const newState = await loadRssFeed(url, watchedState);
 
-      if (watchedState.urls.length === 1) {
+      if (newState.urls.length === 1) {
         setTimeout(() => {
-          checkForUpdates(watchedState);
+          checkForUpdates(newState);
         }, 1000);
       }
+      
+      Object.assign(watchedState, newState);
     } catch (err) {
       if (err.name === 'ValidationError') {
         watchedState.error = err.message;
