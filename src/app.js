@@ -22,6 +22,13 @@ const loadRssFeed = async (url, watchedState) => {
     watchedState.error = '';
     watchedState.successMessage = i18next.t('success');
   } catch (err) {
+    if (err instanceof TypeError) {
+      watchedState.error = i18next.t('networkError')
+    } else {
+      watchedState.error = i18next.t('invalidRSS')
+    }
+    watchedState.isValid = false;
+    watchedState.successMessage ='';
     throw err;
   }
 };
