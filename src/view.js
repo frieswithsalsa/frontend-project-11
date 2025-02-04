@@ -54,7 +54,7 @@ export const initView = (state, i18next) => {
         const postId = e.target.dataset.postId;
         if (postId && !state.readPostIds.includes(postId)) {
           state.readPostIds.push(postId);
-          e.target.classList.add('text-muted', 'fw-normal');
+          e.target.classList.add('text-muted');
           e.target.classList.remove('fw-bold')
         }
       });
@@ -71,7 +71,7 @@ export const initView = (state, i18next) => {
             state.readPostIds.push(postId);
             const postLink = document.querySelector(`.post-link[data-post-id="${postId}"]`)
             if (postLink) {
-              postLink.classList.add('text-muted', 'fw-normal');
+              postLink.classList.add('text-muted');
               postLink.classList.remove('fw-bold')
             }
           }
