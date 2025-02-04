@@ -1,7 +1,7 @@
 import onChange from 'on-change';
 import { Modal } from 'bootstrap';
 
-export const initView = (state, i18next) => {
+export default (state, i18next) => {
   const input = document.querySelector('#url-input');
   const feedback = document.querySelector('.feedback');
   const feedsContainer = document.querySelector('.feeds');
@@ -79,10 +79,9 @@ export const initView = (state, i18next) => {
       });
     });
   };
-  
 
   return onChange(state, (path) => {
-    if (path === 'isValid' || path === 'error' | path === "successMessage") {
+    if (path === 'isValid' || path === 'error' || path === 'successMessage') {
       if (state.isValid) {
         feedback.textContent = state.successMessage;
         feedback.classList.replace('text-danger', 'text-success');

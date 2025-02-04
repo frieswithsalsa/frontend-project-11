@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const fetchRss = async (url) => {
+const fetchRss = async (url) => {
   const proxyUrl = `https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}&disableCache=true`;
 
   try {
@@ -16,3 +16,5 @@ export const fetchRss = async (url) => {
     }
   }
 };
+
+export default fetchRss;

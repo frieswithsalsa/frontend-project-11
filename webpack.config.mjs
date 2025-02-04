@@ -1,7 +1,7 @@
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import process  from 'process';
+import process from 'process';
 
 const mode = process.env.NODE_ENV || 'development';
 

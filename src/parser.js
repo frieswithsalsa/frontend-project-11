@@ -1,4 +1,4 @@
-export const parseRSS = (xmlString) => {
+const parseRSS = (xmlString) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlString, 'application/xml');
 
@@ -39,3 +39,5 @@ export const parseRSS = (xmlString) => {
     posts,
   };
 };
+
+export default parseRSS;

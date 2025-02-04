@@ -1,10 +1,10 @@
 /* eslint-disable no-useless-catch */
 import i18next from 'i18next';
-import { initView } from './view.js';
+import initView  from './view.js';
 import { createSchema } from './validate.js';
-import { fetchRss } from './rss.js';
-import { parseRSS } from './parser.js';
-import { checkForUpdates } from './updater.js';
+import fetchRss from './rss.js';
+import parseRSS from './parser.js';
+import checkForUpdates from './updater.js';
 
 const loadRssFeed = async (url, watchedState) => {
   try {
