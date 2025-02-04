@@ -41,25 +41,25 @@ export const initView = (state, i18next) => {
       <h4 class="${state.posts.length === 0 ? 'd-none' : ''} mb-4">Посты</h4>
       ${state.posts.map((post) => `
         <div class="post mb-3 d-flex justify-content-between align-items-center">
-          <a href="${post.link}" target="_blank" class="post-link ${state.readPostIds.includes(post.id) ? 'text-secondary fw-normal' : 'fw-bold'}" data-post-id="${post.id}">
+          <a href="${post.link}" target="_blank" class="${state.readPostIds.includes(post.id) ? 'text-secondary' : 'fw-bold'}" data-post-id="${post.id}">
             ${post.title}
           </a>
           <button class="btn btn-outline-primary btn-sm" data-post-id="${post.id}">Просмотр</button>
         </div>
       `).join('')}
     `;
-
-    document.querySelectorAll('.post-link').forEach((link) => {
+  
+    document.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', (e) => {
         const postId = e.target.dataset.postId;
         if (postId && !state.readPostIds.includes(postId)) {
           state.readPostIds.push(postId);
-          e.target.classList.remove('fw-bold')
+          e.target.classList.remove('fw-bold');
           e.target.classList.add('text-secondary');
         }
       });
     });
-
+  
     document.querySelectorAll('.btn-outline-primary').forEach((button) => {
       button.addEventListener('click', (e) => {
         e.preventDefault();
@@ -69,9 +69,9 @@ export const initView = (state, i18next) => {
           handlePostClick(post);
           if (!state.readPostIds.includes(postId)) {
             state.readPostIds.push(postId);
-            const postLink = document.querySelector(`.post-link[data-post-id="${postId}"]`)
+            const postLink = document.querySelector(`a[data-post-id="${postId}"]`);
             if (postLink) {
-              postLink.classList.remove('fw-bold')
+              postLink.classList.remove('fw-bold');
               postLink.classList.add('text-secondary');
             }
           }
@@ -79,6 +79,7 @@ export const initView = (state, i18next) => {
       });
     });
   };
+  
 
   return onChange(state, (path) => {
     if (path === 'isValid' || path === 'error' | path === "successMessage") {
