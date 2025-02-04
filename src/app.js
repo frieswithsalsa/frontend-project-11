@@ -22,16 +22,17 @@ const loadRssFeed = async (url, watchedState) => {
     watchedState.error = '';
     watchedState.successMessage = i18next.t('success');
   } catch (err) {
-    if (err instanceof TypeError) {
-      watchedState.error = i18next.t('networkError')
+    if (err instanceof TypeError && err.message === 'networkError') {
+      watchedState.error = i18next.t('networkError');
     } else {
-      watchedState.error = i18next.t('invalidRSS')
+      watchedState.error = i18next.t('invalidRSS');
     }
     watchedState.isValid = false;
-    watchedState.successMessage ='';
+    watchedState.successMessage = '';
     throw err;
   }
 };
+
 
 export default () => {
   const state = {
