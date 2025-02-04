@@ -13,8 +13,7 @@ export default (state, i18next) => {
   const modalElement = document.getElementById('modal');
   const modal = new Modal(modalElement);
 
-  const handlePostClick = (post) => {
-    const { title, description, link } = post;
+  const handlePostClick = ({ title, description, link }) => {
     if (!title || !description || !link) {
       return;
     }
@@ -54,7 +53,7 @@ export default (state, i18next) => {
 
     document.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', (e) => {
-        const postId = e.target.dataset.postId;
+        const { postId } = e.target.dataset;
         if (postId && !readPostIds.includes(postId)) {
           readPostIds.push(postId);
           e.target.classList.remove('fw-bold');
@@ -66,7 +65,7 @@ export default (state, i18next) => {
     document.querySelectorAll('.btn-outline-primary').forEach((button) => {
       button.addEventListener('click', (e) => {
         e.preventDefault();
-        const postId = e.target.dataset.postId;
+        const { postId } = e.target.dataset;
         const post = posts.find((p) => p.id === postId);
         if (post) {
           handlePostClick(post);
@@ -85,14 +84,15 @@ export default (state, i18next) => {
 
   return onChange(state, (path) => {
     if (path === 'isValid' || path === 'error' || path === 'successMessage') {
-      if (state.isValid) {
-        feedback.textContent = state.successMessage;
+      const { isValid, successMessage, error } = state;
+      if (isValid) {
+        feedback.textContent = successMessage;
         feedback.classList.replace('text-danger', 'text-success');
         input.classList.remove('is-invalid');
         input.value = '';
         input.focus();
       } else {
-        feedback.textContent = i18next.t(state.error);
+        feedback.textContent = i18next.t(error);
         feedback.classList.replace('text-success', 'text-danger');
         input.classList.add('is-invalid');
       }
