@@ -33,7 +33,6 @@ const loadRssFeed = async (url, watchedState) => {
   }
 };
 
-
 export default () => {
   const state = {
     urls: [],
