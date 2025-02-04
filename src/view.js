@@ -54,8 +54,8 @@ export const initView = (state, i18next) => {
         const postId = e.target.dataset.postId;
         if (postId && !state.readPostIds.includes(postId)) {
           state.readPostIds.push(postId);
-          e.target.classList.add('text-muted');
           e.target.classList.remove('fw-bold')
+          e.target.classList.add('text-secondary');
         }
       });
     });
@@ -71,8 +71,8 @@ export const initView = (state, i18next) => {
             state.readPostIds.push(postId);
             const postLink = document.querySelector(`.post-link[data-post-id="${postId}"]`)
             if (postLink) {
-              postLink.classList.add('text-muted');
               postLink.classList.remove('fw-bold')
+              postLink.classList.add('text-secondary');
             }
           }
         }
