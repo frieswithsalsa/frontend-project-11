@@ -14,37 +14,40 @@ export default (state, i18next) => {
   const modal = new Modal(modalElement);
 
   const handlePostClick = (post) => {
-    if (!post.title || !post.description || !post.link) {
+    const { title, description, link } = post;
+    if (!title || !description || !link) {
       return;
     }
 
-    modalTitle.textContent = post.title;
-    modalBody.innerHTML = post.description;
-    fullArticleLink.href = post.link;
+    modalTitle.textContent = title;
+    modalBody.innerHTML = description;
+    fullArticleLink.href = link;
     modal.show();
   };
 
   const renderFeeds = () => {
+    const { feeds } = state;
     feedsContainer.innerHTML = `
-      <h4 class="${state.feeds.length === 0 ? 'd-none' : ''} mb-4">Фиды</h4>
-      ${state.feeds.map((feed) => `
+      <h4 class="${feeds.length === 0 ? 'd-none' : ''} mb-4">Фиды</h4>
+      ${feeds.map(({ title, description }) => `  <!-- Деструктуризация каждого feed -->
         <div class="feed mb-4">
-          <h6>${feed.title}</h6>
-          <p>${feed.description}</p>
+          <h6>${title}</h6>
+          <p>${description}</p>
         </div>
       `).join('')}
     `;
   };
 
   const renderPosts = () => {
+    const { posts, readPostIds } = state;
     postsContainer.innerHTML = `
-      <h4 class="${state.posts.length === 0 ? 'd-none' : ''} mb-4">Посты</h4>
-      ${state.posts.map((post) => `
+      <h4 class="${posts.length === 0 ? 'd-none' : ''} mb-4">Посты</h4>
+      ${posts.map(({ id, title, link }) => `  <!-- Деструктуризация каждого post -->
         <div class="post mb-3 d-flex justify-content-between align-items-center">
-          <a href="${post.link}" target="_blank" class="${state.readPostIds.includes(post.id) ? 'text-secondary' : 'fw-bold'}" data-post-id="${post.id}">
-            ${post.title}
+          <a href="${link}" target="_blank" class="${readPostIds.includes(id) ? 'text-secondary' : 'fw-bold'}" data-post-id="${id}">
+            ${title}
           </a>
-          <button class="btn btn-outline-primary btn-sm" data-post-id="${post.id}">Просмотр</button>
+          <button class="btn btn-outline-primary btn-sm" data-post-id="${id}">Просмотр</button>
         </div>
       `).join('')}
     `;
@@ -52,8 +55,8 @@ export default (state, i18next) => {
     document.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', (e) => {
         const postId = e.target.dataset.postId;
-        if (postId && !state.readPostIds.includes(postId)) {
-          state.readPostIds.push(postId);
+        if (postId && !readPostIds.includes(postId)) {
+          readPostIds.push(postId);
           e.target.classList.remove('fw-bold');
           e.target.classList.add('text-secondary');
         }
@@ -64,11 +67,11 @@ export default (state, i18next) => {
       button.addEventListener('click', (e) => {
         e.preventDefault();
         const postId = e.target.dataset.postId;
-        const post = state.posts.find((p) => p.id === postId);
+        const post = posts.find((p) => p.id === postId);
         if (post) {
           handlePostClick(post);
-          if (!state.readPostIds.includes(postId)) {
-            state.readPostIds.push(postId);
+          if (!readPostIds.includes(postId)) {
+            readPostIds.push(postId);
             const postLink = document.querySelector(`a[data-post-id="${postId}"]`);
             if (postLink) {
               postLink.classList.remove('fw-bold');
