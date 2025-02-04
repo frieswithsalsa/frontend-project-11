@@ -98,7 +98,7 @@ export default () => {
           checkForUpdates(newState);
         }, 1000);
       }
-      
+
       Object.assign(watchedState, newState);
     } catch (err) {
       if (err.name === 'ValidationError') {

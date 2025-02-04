@@ -13,9 +13,7 @@ const checkForUpdates = async (state) => {
       const { posts: newPosts } = await loadAndParseRss(url);
 
       const existingUrls = state.posts.map((post) => post.link);
-      const uniqueNewPosts = newPosts.filter(
-        (post) => !existingUrls.includes(post.link)
-      );
+      const uniqueNewPosts = newPosts.filter((post) => !existingUrls.includes(post.link));
 
       if (uniqueNewPosts.length > 0) {
         state.posts.unshift(...uniqueNewPosts);

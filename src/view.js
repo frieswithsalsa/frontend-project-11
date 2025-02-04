@@ -48,7 +48,7 @@ export default (state, i18next) => {
         </div>
       `).join('')}
     `;
-  
+
     document.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', (e) => {
         const postId = e.target.dataset.postId;
@@ -59,7 +59,7 @@ export default (state, i18next) => {
         }
       });
     });
-  
+
     document.querySelectorAll('.btn-outline-primary').forEach((button) => {
       button.addEventListener('click', (e) => {
         e.preventDefault();
