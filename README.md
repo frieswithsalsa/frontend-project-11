@@ -5,6 +5,11 @@
 ## RSS агрегатор
 
 ### Установка:
+```
+git clone https://github.com/frieswithsalsa/frontend-project-11.git
+cd frontend-project-11
+```
+
 ```bash
 make install
 ```
