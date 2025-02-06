@@ -6,7 +6,6 @@ export default (state, i18next) => {
   const feedback = document.querySelector('.feedback');
   const feedsContainer = document.querySelector('.feeds');
   const postsContainer = document.querySelector('.posts');
-
   const modalTitle = document.querySelector('.modal-title');
   const modalBody = document.querySelector('.modal-body');
   const fullArticleLink = document.querySelector('.full-article');
@@ -82,6 +81,8 @@ export default (state, i18next) => {
     });
   };
 
+
+  
   input.addEventListener('input', () => {
     const url = input.value;
     const isValidUrl = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(url);
