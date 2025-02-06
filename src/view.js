@@ -26,9 +26,9 @@ export default (state, i18next) => {
 
   const renderFeeds = () => {
     const { feeds } = state;
-    feedsContainer.innerHTML = `
+    feedsContainer.innerHTML = `  
       <h4 class="${feeds.length === 0 ? 'd-none' : ''} mb-4">Фиды</h4>
-      ${feeds.map(({ title, description }) => `  <!-- Деструктуризация каждого feed -->
+      ${feeds.map(({ title, description }) => `
         <div class="feed mb-4">
           <h6>${title}</h6>
           <p>${description}</p>
@@ -39,9 +39,9 @@ export default (state, i18next) => {
 
   const renderPosts = () => {
     const { posts, readPostIds } = state;
-    postsContainer.innerHTML = `
+    postsContainer.innerHTML = `  
       <h4 class="${posts.length === 0 ? 'd-none' : ''} mb-4">Посты</h4>
-      ${posts.map(({ id, title, link }) => `  <!-- Деструктуризация каждого post -->
+      ${posts.map(({ id, title, link }) => `
         <div class="post mb-3 d-flex justify-content-between align-items-center">
           <a href="${link}" target="_blank" class="${readPostIds.includes(id) ? 'text-secondary' : 'fw-bold'}" data-post-id="${id}">
             ${title}
@@ -81,6 +81,23 @@ export default (state, i18next) => {
       });
     });
   };
+
+  input.addEventListener('input', () => {
+    const url = input.value;
+    const isValidUrl = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(url);
+
+    if (isValidUrl) {
+      feedback.textContent = '';
+      feedback.classList.remove('text-danger');
+      feedback.classList.add('text-success');
+      input.classList.remove('is-invalid');
+    } else {
+      feedback.textContent = i18next.t('invalidUrl');
+      feedback.classList.remove('text-success');
+      feedback.classList.add('text-danger');
+      input.classList.add('is-invalid');
+    }
+  });
 
   return onChange(state, (path) => {
     if (path === 'isValid' || path === 'error' || path === 'successMessage') {
