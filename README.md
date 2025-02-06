@@ -4,17 +4,19 @@
 
 ## RSS агрегатор
 
-### Системные требования:
-```
-Node.js - 20.x
-```
-
 ### Установка:
-
-```
-git clone https://github.com/frieswithsalsa/frontend-project-11.git
-cd frontend-project-11/
+```bash
 make install
+```
+
+### Сборка:
+```bash
+make build
+```
+
+### Запуск для разработки:
+```bash
+make develop
 ```
 
 ### Описание:
@@ -22,3 +24,5 @@ RSS-агрегатор — это веб-приложение для загру�
 
 ### Deploy
 https://frontend-project-11-theta-ivory.vercel.app/
+
+
